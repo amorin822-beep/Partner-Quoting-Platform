@@ -1,0 +1,702 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Hickory Cove Insurance — Partner Quoting Portal</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@2.44.0/tabler-icons.min.css" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --navy: #1B3A5C;
+      --navy-dark: #162f4a;
+      --green: #4CAF82;
+      --green-dark: #3d9970;
+      --green-light: #E1F5EE;
+      --green-text: #085041;
+      --blue-light: #E6F1FB;
+      --blue-mid: #B5D4F4;
+      --blue-text: #0C447C;
+      --blue-strong: #185FA5;
+      --border: rgba(0,0,0,0.12);
+      --border-soft: rgba(0,0,0,0.07);
+      --bg: #F4F6F9;
+      --surface: #ffffff;
+      --surface2: #F8F9FB;
+      --text: #1a1a1a;
+      --text2: #555;
+      --text3: #888;
+      --radius: 10px;
+      --radius-lg: 14px;
+    }
+
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: var(--bg);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 32px 16px 60px;
+      color: var(--text);
+    }
+
+    /* ── Top brand bar ── */
+    .brand-bar {
+      width: 100%;
+      max-width: 780px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 20px;
+    }
+    .brand-left { display: flex; align-items: center; gap: 10px; }
+    .leaf {
+      width: 30px; height: 30px;
+      background: var(--green);
+      border-radius: 50% 50% 50% 0;
+      transform: rotate(-45deg);
+      flex-shrink: 0;
+    }
+    .brand-name { font-size: 16px; font-weight: 600; color: var(--navy); letter-spacing: 0.01em; }
+    .brand-sub { font-size: 12px; color: var(--text3); }
+
+    /* ── Shell ── */
+    .shell {
+      width: 100%;
+      max-width: 780px;
+      background: var(--surface);
+      border-radius: var(--radius-lg);
+      border: 1px solid var(--border-soft);
+      box-shadow: 0 4px 24px rgba(0,0,0,0.07);
+      overflow: hidden;
+    }
+
+    /* ── Progress tabs ── */
+    .progress-bar {
+      background: var(--navy);
+      display: flex;
+    }
+    .step-tab {
+      flex: 1;
+      padding: 13px 4px 12px;
+      font-size: 11.5px;
+      font-weight: 500;
+      color: rgba(255,255,255,0.38);
+      text-align: center;
+      border-bottom: 2.5px solid transparent;
+      transition: all 0.2s;
+      letter-spacing: 0.01em;
+    }
+    .step-tab.active { color: #fff; border-bottom-color: var(--green); }
+    .step-tab.done { color: rgba(255,255,255,0.6); border-bottom-color: rgba(76,175,130,0.4); }
+
+    /* ── Content ── */
+    .content { padding: 32px 32px 28px; }
+    .screen { display: none; }
+    .screen.active { display: block; }
+
+    h2 { font-size: 19px; font-weight: 600; color: var(--text); margin-bottom: 5px; }
+    .subtitle { font-size: 13px; color: var(--text3); margin-bottom: 24px; line-height: 1.5; }
+
+    /* ── Forms ── */
+    .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+    .form-grid.three { grid-template-columns: 1fr 1fr 1fr; }
+    .form-group { display: flex; flex-direction: column; gap: 5px; }
+    .form-group.full { grid-column: 1 / -1; }
+    label { font-size: 11px; font-weight: 600; color: var(--text3); letter-spacing: 0.06em; text-transform: uppercase; }
+    input, select {
+      width: 100%;
+      padding: 9px 11px;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      background: var(--surface);
+      color: var(--text);
+      font-size: 14px;
+      font-family: 'DM Sans', sans-serif;
+      transition: border-color 0.15s, box-shadow 0.15s;
+      appearance: none;
+      -webkit-appearance: none;
+    }
+    input:focus, select:focus {
+      outline: none;
+      border-color: var(--green);
+      box-shadow: 0 0 0 3px rgba(76,175,130,0.15);
+    }
+    select { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%23888' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 12px center; padding-right: 32px; }
+
+    .section-label {
+      font-size: 10.5px; font-weight: 600; letter-spacing: 0.09em;
+      color: var(--text3); text-transform: uppercase;
+      margin: 22px 0 13px;
+      padding-bottom: 7px;
+      border-bottom: 1px solid var(--border-soft);
+    }
+
+    /* ── Buttons ── */
+    .btn-row { display: flex; justify-content: flex-end; gap: 10px; margin-top: 26px; }
+    .btn {
+      padding: 10px 22px; border-radius: var(--radius);
+      font-size: 14px; font-weight: 500; font-family: 'DM Sans', sans-serif;
+      cursor: pointer; border: 1px solid var(--border);
+      background: var(--surface); color: var(--text);
+      transition: background 0.15s, transform 0.1s;
+    }
+    .btn:hover { background: var(--surface2); }
+    .btn:active { transform: scale(0.98); }
+    .btn.primary { background: var(--navy); color: #fff; border-color: var(--navy); }
+    .btn.primary:hover { background: var(--navy-dark); }
+    .btn.success { background: var(--green); color: #fff; border-color: var(--green); }
+    .btn.success:hover { background: var(--green-dark); }
+    .btn:disabled { opacity: 0.38; cursor: default; pointer-events: none; }
+
+    /* ── Type chips ── */
+    .type-chips { display: flex; gap: 10px; margin-bottom: 20px; flex-wrap: wrap; }
+    .chip {
+      padding: 9px 20px; border-radius: 30px;
+      border: 1px solid var(--border);
+      font-size: 13.5px; font-weight: 500; cursor: pointer;
+      background: var(--surface); color: var(--text2);
+      transition: all 0.15s;
+      display: flex; align-items: center; gap: 6px;
+    }
+    .chip:hover { border-color: var(--navy); color: var(--navy); }
+    .chip.on { background: var(--navy); color: #fff; border-color: var(--navy); }
+    .tip-row { font-size: 12px; color: var(--text3); display: flex; align-items: center; gap: 5px; }
+
+    /* ── Loading ── */
+    .quote-loading {
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      padding: 70px 20px; gap: 18px;
+    }
+    .spinner {
+      width: 38px; height: 38px;
+      border: 3px solid var(--border);
+      border-top-color: var(--green);
+      border-radius: 50%;
+      animation: spin 0.85s linear infinite;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    .spinner-label { font-size: 14px; color: var(--text3); }
+    .carrier-progress { width: 260px; display: flex; flex-direction: column; gap: 9px; margin-top: 6px; }
+    .cp-row { display: flex; align-items: center; gap: 10px; font-size: 13px; color: var(--text2); }
+    .cp-dot { width: 9px; height: 9px; border-radius: 50%; background: var(--border); flex-shrink: 0; transition: background 0.3s; }
+    .cp-dot.done2 { background: var(--green); }
+    .cp-dot.active2 { background: var(--navy); animation: pulse 0.7s infinite alternate; }
+    @keyframes pulse { from { opacity: 0.5; } to { opacity: 1; } }
+
+    /* ── Quote cards ── */
+    .carrier-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 4px; }
+    .quote-card {
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 18px 20px;
+      background: var(--surface);
+      cursor: pointer;
+      transition: border-color 0.15s, box-shadow 0.15s;
+    }
+    .quote-card:hover { border-color: rgba(0,0,0,0.22); box-shadow: 0 2px 10px rgba(0,0,0,0.06); }
+    .quote-card.best-val-card { border: 2px solid var(--navy); }
+    .quote-card.selected-card { border: 2px solid var(--green) !important; box-shadow: 0 0 0 3px rgba(76,175,130,0.12); }
+    .badge {
+      display: inline-flex; align-items: center; gap: 4px;
+      font-size: 11px; font-weight: 600; padding: 3px 10px;
+      border-radius: 20px; margin-bottom: 10px; letter-spacing: 0.02em;
+    }
+    .badge.bv { background: var(--green-light); color: var(--green-text); }
+    .badge.pop { background: var(--blue-light); color: var(--blue-text); }
+    .carrier-name { font-size: 15px; font-weight: 600; color: var(--text); margin-bottom: 2px; }
+    .carrier-type { font-size: 12px; color: var(--text3); margin-bottom: 12px; }
+    .price-row { display: flex; align-items: baseline; gap: 4px; margin-bottom: 12px; }
+    .price-big { font-size: 28px; font-weight: 600; color: var(--navy); }
+    .price-per { font-size: 13px; color: var(--text3); }
+    .quote-details { font-size: 12px; color: var(--text3); display: flex; flex-direction: column; gap: 4px; }
+    .quote-details span { display: flex; align-items: center; gap: 6px; }
+    .quote-details .ti { color: var(--green); font-size: 14px; flex-shrink: 0; }
+
+    /* ── Confirm ── */
+    .confirm-card {
+      background: var(--surface2); border: 1px solid var(--border-soft);
+      border-radius: var(--radius-lg); padding: 20px 22px; margin-bottom: 18px;
+    }
+    .confirm-row {
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 8px 0; border-bottom: 1px solid var(--border-soft);
+      font-size: 13.5px;
+    }
+    .confirm-row:last-child { border-bottom: none; }
+    .confirm-row .clabel { color: var(--text3); }
+    .confirm-row .cval { color: var(--text); font-weight: 500; }
+    .sla-box {
+      background: var(--blue-light); border: 1px solid var(--blue-mid);
+      border-radius: var(--radius-lg); padding: 16px 20px;
+      display: flex; gap: 14px; align-items: flex-start; margin-bottom: 20px;
+    }
+    .sla-icon { font-size: 22px; color: var(--blue-strong); margin-top: 1px; flex-shrink: 0; }
+    .sla-text h4 { font-size: 13.5px; font-weight: 600; color: var(--blue-text); margin-bottom: 5px; }
+    .sla-text p { font-size: 12.5px; color: var(--blue-strong); line-height: 1.6; }
+
+    /* ── Success ── */
+    .success-screen { text-align: center; padding: 40px 24px 20px; }
+    .success-circle {
+      width: 68px; height: 68px; background: var(--green-light); border-radius: 50%;
+      display: flex; align-items: center; justify-content: center; margin: 0 auto 18px;
+    }
+    .success-circle .ti { font-size: 32px; color: var(--green-text); }
+    .success-screen h2 { font-size: 21px; margin-bottom: 8px; }
+    .ref-pill {
+      display: inline-block; background: var(--surface2);
+      border: 1px solid var(--border); border-radius: 20px;
+      padding: 6px 20px; font-size: 13px; font-weight: 500;
+      color: var(--text3); margin-bottom: 16px;
+    }
+    .success-screen .sub { font-size: 14px; color: var(--text3); max-width: 400px; margin: 0 auto 22px; line-height: 1.65; }
+    .sla-banner {
+      background: var(--navy); border-radius: var(--radius);
+      padding: 14px 18px; margin-bottom: 18px; text-align: left;
+    }
+    .sla-banner h4 { color: #fff; font-size: 13.5px; font-weight: 600; margin-bottom: 5px; display: flex; align-items: center; gap: 7px; }
+    .sla-banner p { color: rgba(255,255,255,0.65); font-size: 12.5px; line-height: 1.55; }
+    .agent-info {
+      display: flex; align-items: center; gap: 12px;
+      background: var(--surface2); border-radius: var(--radius);
+      padding: 13px 16px; margin-top: 4px;
+    }
+    .agent-avatar {
+      width: 38px; height: 38px; border-radius: 50%;
+      background: var(--green); display: flex; align-items: center;
+      justify-content: center; font-size: 13px; font-weight: 600;
+      color: #fff; flex-shrink: 0;
+    }
+    .agent-name { font-size: 13.5px; font-weight: 600; color: var(--text); }
+    .agent-role { font-size: 12px; color: var(--text3); }
+
+    /* ── Footer ── */
+    .portal-footer {
+      margin-top: 20px;
+      font-size: 11.5px;
+      color: var(--text3);
+      text-align: center;
+      line-height: 1.6;
+    }
+
+    @media (max-width: 600px) {
+      .content { padding: 22px 18px 20px; }
+      .form-grid, .form-grid.three { grid-template-columns: 1fr; }
+      .form-group.full { grid-column: 1; }
+      .carrier-grid { grid-template-columns: 1fr; }
+      .step-tab { font-size: 10px; padding: 11px 2px; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="brand-bar">
+    <div class="brand-left">
+      <div class="leaf"></div>
+      <div>
+        <div class="brand-name">Hickory Cove Insurance</div>
+        <div class="brand-sub">Partner Quoting Portal</div>
+      </div>
+    </div>
+    <div class="brand-sub">Powered by EZLynx</div>
+  </div>
+
+  <div class="shell">
+    <div class="progress-bar" id="progress-bar">
+      <div class="step-tab active" id="tab-1">1 · Coverage</div>
+      <div class="step-tab" id="tab-2">2 · Applicant</div>
+      <div class="step-tab" id="tab-3">3 · Property / Auto</div>
+      <div class="step-tab" id="tab-4">4 · Quotes</div>
+      <div class="step-tab" id="tab-5">5 · Confirm</div>
+    </div>
+
+    <div class="content">
+
+      <!-- SCREEN 1 -->
+      <div class="screen active" id="screen-1">
+        <h2>Select coverage type</h2>
+        <p class="subtitle">Choose what you'd like to quote for this prospective client.</p>
+        <div class="type-chips" id="type-chips">
+          <div class="chip on" onclick="toggleChip(this)"><i class="ti ti-home"></i> Home</div>
+          <div class="chip" onclick="toggleChip(this)"><i class="ti ti-car"></i> Auto</div>
+          <div class="chip" onclick="toggleChip(this)"><i class="ti ti-package"></i> Home + Auto Bundle</div>
+        </div>
+        <p class="tip-row"><i class="ti ti-info-circle"></i> Bundling home and auto may qualify for multi-policy discounts across carriers.</p>
+        <div class="btn-row">
+          <button class="btn primary" onclick="goTo(2)">Continue &rarr;</button>
+        </div>
+      </div>
+
+      <!-- SCREEN 2 -->
+      <div class="screen" id="screen-2">
+        <h2>Applicant information</h2>
+        <p class="subtitle">Enter the prospective client's personal details as they appear on their application.</p>
+        <div class="form-grid">
+          <div class="form-group">
+            <label>First name</label>
+            <input type="text" value="John" />
+          </div>
+          <div class="form-group">
+            <label>Last name</label>
+            <input type="text" value="Doe" />
+          </div>
+          <div class="form-group">
+            <label>Date of birth</label>
+            <input type="text" value="03/14/1981" />
+          </div>
+          <div class="form-group">
+            <label>Marital status</label>
+            <select><option>Married</option><option>Single</option><option>Divorced</option><option>Widowed</option></select>
+          </div>
+          <div class="form-group full">
+            <label>Email address</label>
+            <input type="text" value="john.doe@email.com" />
+          </div>
+          <div class="form-group">
+            <label>Phone number</label>
+            <input type="text" value="(404) 555-0192" />
+          </div>
+          <div class="form-group">
+            <label>Credit tier</label>
+            <select><option>Excellent (750+)</option><option>Good (700–749)</option><option>Fair (650–699)</option><option>Poor (&lt;650)</option></select>
+          </div>
+        </div>
+        <div class="section-label">Current insurance</div>
+        <div class="form-grid">
+          <div class="form-group">
+            <label>Current carrier</label>
+            <input type="text" value="State Farm" />
+          </div>
+          <div class="form-group">
+            <label>Years continuously insured</label>
+            <input type="text" value="7" />
+          </div>
+        </div>
+        <div class="btn-row">
+          <button class="btn" onclick="goTo(1)">&larr; Back</button>
+          <button class="btn primary" onclick="goTo(3)">Continue &rarr;</button>
+        </div>
+      </div>
+
+      <!-- SCREEN 3 -->
+      <div class="screen" id="screen-3">
+        <h2>Property &amp; vehicle details</h2>
+        <p class="subtitle">Provide details about the home and/or vehicle to be quoted.</p>
+
+        <div class="section-label">Home details</div>
+        <div class="form-grid">
+          <div class="form-group full">
+            <label>Property address</label>
+            <input type="text" value="2847 Magnolia Creek Dr, Marietta, GA 30062" />
+          </div>
+          <div class="form-group">
+            <label>Year built</label>
+            <input type="text" value="2004" />
+          </div>
+          <div class="form-group">
+            <label>Square footage</label>
+            <input type="text" value="2,450" />
+          </div>
+          <div class="form-group">
+            <label>Construction type</label>
+            <select><option>Frame</option><option>Masonry</option><option>Manufactured</option></select>
+          </div>
+          <div class="form-group">
+            <label>Roof year</label>
+            <input type="text" value="2018" />
+          </div>
+          <div class="form-group">
+            <label>Dwelling coverage</label>
+            <input type="text" value="$385,000" />
+          </div>
+          <div class="form-group">
+            <label>Deductible</label>
+            <select><option>$1,000</option><option>$2,500</option><option>$5,000</option></select>
+          </div>
+        </div>
+
+        <div class="section-label">Auto details</div>
+        <div class="form-grid three">
+          <div class="form-group">
+            <label>Year</label>
+            <input type="text" value="2021" />
+          </div>
+          <div class="form-group">
+            <label>Make</label>
+            <input type="text" value="Toyota" />
+          </div>
+          <div class="form-group">
+            <label>Model</label>
+            <input type="text" value="Highlander" />
+          </div>
+          <div class="form-group">
+            <label>VIN (last 6)</label>
+            <input type="text" value="8X4291" />
+          </div>
+          <div class="form-group">
+            <label>Annual mileage</label>
+            <input type="text" value="12,000" />
+          </div>
+          <div class="form-group">
+            <label>Garaging ZIP</label>
+            <input type="text" value="30062" />
+          </div>
+        </div>
+        <div class="form-grid" style="margin-top:14px;">
+          <div class="form-group">
+            <label>Prior claims (3 yr)</label>
+            <select><option>None</option><option>1</option><option>2+</option></select>
+          </div>
+          <div class="form-group">
+            <label>Violations (3 yr)</label>
+            <select><option>None</option><option>1 Minor</option><option>1 Major</option></select>
+          </div>
+        </div>
+        <div class="btn-row">
+          <button class="btn" onclick="goTo(2)">&larr; Back</button>
+          <button class="btn primary" onclick="startQuoting()">Run Quotes &rarr;</button>
+        </div>
+      </div>
+
+      <!-- SCREEN: Loading -->
+      <div class="screen" id="screen-loading">
+        <div class="quote-loading">
+          <div class="spinner"></div>
+          <div class="spinner-label">Requesting quotes from carriers…</div>
+          <div class="carrier-progress">
+            <div class="cp-row"><div class="cp-dot" id="dot-0"></div><span>Travelers</span></div>
+            <div class="cp-row"><div class="cp-dot" id="dot-1"></div><span>Allstate</span></div>
+            <div class="cp-row"><div class="cp-dot" id="dot-2"></div><span>Mercury</span></div>
+            <div class="cp-row"><div class="cp-dot" id="dot-3"></div><span>Nationwide</span></div>
+            <div class="cp-row"><div class="cp-dot" id="dot-4"></div><span>Farmers</span></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- SCREEN 4 -->
+      <div class="screen" id="screen-4">
+        <h2>Quote results</h2>
+        <p class="subtitle">Home + Auto bundle estimates for John Doe &mdash; 2847 Magnolia Creek Dr, Marietta GA &middot; 2021 Toyota Highlander</p>
+        <div class="carrier-grid">
+
+          <div class="quote-card best-val-card" id="qc-travelers" onclick="selectQuote(this,'travelers','Travelers','$218/mo')">
+            <div class="badge bv"><i class="ti ti-award" style="font-size:12px;"></i> Best Value</div>
+            <div class="carrier-name">Travelers</div>
+            <div class="carrier-type">Home + Auto Bundle</div>
+            <div class="price-row"><span class="price-big">$218</span><span class="price-per">/mo</span></div>
+            <div class="quote-details">
+              <span><i class="ti ti-check"></i> Home: $1,460/yr &bull; Auto: $1,156/yr</span>
+              <span><i class="ti ti-check"></i> $1,000 deductible &bull; $300k liability</span>
+              <span><i class="ti ti-check"></i> Bundle discount: 12%</span>
+            </div>
+          </div>
+
+          <div class="quote-card" id="qc-allstate" onclick="selectQuote(this,'allstate','Allstate','$231/mo')">
+            <div class="badge pop"><i class="ti ti-star" style="font-size:12px;"></i> Most Popular</div>
+            <div class="carrier-name">Allstate</div>
+            <div class="carrier-type">Home + Auto Bundle</div>
+            <div class="price-row"><span class="price-big">$231</span><span class="price-per">/mo</span></div>
+            <div class="quote-details">
+              <span><i class="ti ti-check"></i> Home: $1,572/yr &bull; Auto: $1,200/yr</span>
+              <span><i class="ti ti-check"></i> $1,000 deductible &bull; $300k liability</span>
+              <span><i class="ti ti-check"></i> Bundle discount: 10%</span>
+            </div>
+          </div>
+
+          <div class="quote-card" id="qc-mercury" onclick="selectQuote(this,'mercury','Mercury','$244/mo')">
+            <div class="carrier-name">Mercury</div>
+            <div class="carrier-type">Home + Auto Bundle</div>
+            <div class="price-row"><span class="price-big">$244</span><span class="price-per">/mo</span></div>
+            <div class="quote-details">
+              <span><i class="ti ti-check"></i> Home: $1,620/yr &bull; Auto: $1,308/yr</span>
+              <span><i class="ti ti-check"></i> $1,000 deductible &bull; $250k liability</span>
+              <span><i class="ti ti-check"></i> Bundle discount: 8%</span>
+            </div>
+          </div>
+
+          <div class="quote-card" id="qc-nationwide" onclick="selectQuote(this,'nationwide','Nationwide','$252/mo')">
+            <div class="carrier-name">Nationwide</div>
+            <div class="carrier-type">Home + Auto Bundle</div>
+            <div class="price-row"><span class="price-big">$252</span><span class="price-per">/mo</span></div>
+            <div class="quote-details">
+              <span><i class="ti ti-check"></i> Home: $1,688/yr &bull; Auto: $1,336/yr</span>
+              <span><i class="ti ti-check"></i> $1,000 deductible &bull; $300k liability</span>
+              <span><i class="ti ti-check"></i> Bundle discount: 9%</span>
+            </div>
+          </div>
+
+          <div class="quote-card" id="qc-farmers" onclick="selectQuote(this,'farmers','Farmers','$261/mo')" style="grid-column: 1 / -1;">
+            <div class="carrier-name">Farmers</div>
+            <div class="carrier-type">Home + Auto Bundle</div>
+            <div class="price-row"><span class="price-big">$261</span><span class="price-per">/mo</span></div>
+            <div class="quote-details">
+              <span><i class="ti ti-check"></i> Home: $1,748/yr &bull; Auto: $1,384/yr</span>
+              <span><i class="ti ti-check"></i> $1,000 deductible &bull; $300k liability</span>
+              <span><i class="ti ti-check"></i> Smart Plan discount: 7%</span>
+            </div>
+          </div>
+
+        </div>
+        <div class="btn-row">
+          <button class="btn" onclick="goTo(3)">&larr; Back</button>
+          <button class="btn primary" id="btn-select" onclick="proceedConfirm()" disabled>Select Quote &rarr;</button>
+        </div>
+      </div>
+
+      <!-- SCREEN 5 -->
+      <div class="screen" id="screen-5">
+        <h2>Confirm &amp; request finalization</h2>
+        <p class="subtitle">Review the selected quote before submitting to Hickory Cove for final binding.</p>
+
+        <div class="confirm-card">
+          <div class="confirm-row"><span class="clabel">Applicant</span><span class="cval">John Doe</span></div>
+          <div class="confirm-row"><span class="clabel">Coverage type</span><span class="cval">Home + Auto Bundle</span></div>
+          <div class="confirm-row"><span class="clabel">Property</span><span class="cval">2847 Magnolia Creek Dr, Marietta GA</span></div>
+          <div class="confirm-row"><span class="clabel">Vehicle</span><span class="cval">2021 Toyota Highlander</span></div>
+          <div class="confirm-row"><span class="clabel">Selected carrier</span><span class="cval" id="confirm-carrier">—</span></div>
+          <div class="confirm-row"><span class="clabel">Monthly premium (est.)</span><span class="cval" id="confirm-premium" style="color:var(--navy); font-size:16px;">—</span></div>
+          <div class="confirm-row"><span class="clabel">Deductible</span><span class="cval">$1,000</span></div>
+          <div class="confirm-row"><span class="clabel">Referring partner</span><span class="cval">Partner Portal — Unique Link</span></div>
+        </div>
+
+        <div class="sla-box">
+          <i class="ti ti-clock sla-icon"></i>
+          <div class="sla-text">
+            <h4>4-Hour SLA Commitment</h4>
+            <p>Hickory Cove guarantees a response and finalized quote within <strong>4 business hours</strong> of submission. If we miss this window, <strong>new business commission is automatically increased by 2%</strong> for your agency on this policy.</p>
+          </div>
+        </div>
+
+        <div class="btn-row">
+          <button class="btn" onclick="goTo(4)">&larr; Back</button>
+          <button class="btn success" onclick="goTo(6)"><i class="ti ti-send"></i> &nbsp;Submit for Finalization</button>
+        </div>
+      </div>
+
+      <!-- SCREEN 6 -->
+      <div class="screen" id="screen-6">
+        <div class="success-screen">
+          <div class="success-circle"><i class="ti ti-circle-check"></i></div>
+          <h2>Quote request submitted!</h2>
+          <div class="ref-pill"><i class="ti ti-hash" style="font-size:12px; vertical-align:-1px;"></i> &nbsp;REF-2024-HC-88312</div>
+          <p class="sub">Your request for a finalized <strong id="success-carrier">Travelers</strong> Home + Auto bundle quote for <strong>John Doe</strong> has been received by Hickory Cove Insurance.</p>
+          <div class="sla-banner">
+            <h4><i class="ti ti-clock"></i> 4-hour SLA is now active</h4>
+            <p>A licensed agent will finalize this quote and be in touch within 4 business hours. If we miss this deadline, your agency's new business commission on this policy <strong>automatically increases by 2%</strong>.</p>
+          </div>
+          <div class="agent-info">
+            <div class="agent-avatar">SC</div>
+            <div>
+              <div class="agent-name">Sarah Collins</div>
+              <div class="agent-role">New Business Agent &middot; Hickory Cove Insurance &middot; (770) 555-0147</div>
+            </div>
+          </div>
+          <div class="btn-row" style="justify-content:center; margin-top:22px;">
+            <button class="btn" onclick="resetAll()"><i class="ti ti-plus"></i> &nbsp;Start new quote</button>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <div class="portal-footer">
+    &copy; 2024 Hickory Cove Insurance &mdash; Independent Agency &middot; All quotes are estimates. Final premium subject to underwriting review.<br>
+    Questions? Contact <a href="mailto:newbusiness@hickorycoveins.com" style="color:var(--navy);">newbusiness@hickorycoveins.com</a>
+  </div>
+
+  <script>
+    let selectedCarrier = null;
+    let selectedPrice = null;
+
+    function toggleChip(el) {
+      document.querySelectorAll('.chip').forEach(c => c.classList.remove('on'));
+      el.classList.add('on');
+    }
+
+    function goTo(n) {
+      document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+      const id = n === 6 ? 'screen-6' : 'screen-' + n;
+      document.getElementById(id).classList.add('active');
+      for (let i = 1; i <= 5; i++) {
+        const tab = document.getElementById('tab-' + i);
+        if (!tab) continue;
+        tab.classList.remove('active', 'done');
+        if (i < n && n <= 6) tab.classList.add('done');
+        else if (i === n) tab.classList.add('active');
+      }
+      if (n === 6) {
+        document.querySelectorAll('.step-tab').forEach(t => { t.classList.remove('active'); t.classList.add('done'); });
+      }
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function startQuoting() {
+      document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+      document.getElementById('screen-loading').classList.add('active');
+      document.querySelectorAll('.step-tab').forEach((t, i) => {
+        t.classList.remove('active', 'done');
+        if (i < 3) t.classList.add('done');
+      });
+      const dots = [0,1,2,3,4];
+      let i = 0;
+      function next() {
+        if (i > 0) document.getElementById('dot-'+(i-1)).className = 'cp-dot done2';
+        if (i < dots.length) {
+          document.getElementById('dot-'+i).className = 'cp-dot active2';
+          i++;
+          setTimeout(next, 500);
+        } else {
+          document.getElementById('dot-4').className = 'cp-dot done2';
+          setTimeout(() => goTo(4), 350);
+        }
+      }
+      next();
+    }
+
+    function selectQuote(el, carrier, name, price) {
+      document.querySelectorAll('.quote-card').forEach(c => {
+        c.classList.remove('selected-card');
+        if (c.id === 'qc-travelers') {
+          c.style.border = '2px solid var(--navy)';
+        } else {
+          c.style.border = '1px solid var(--border)';
+        }
+      });
+      el.classList.add('selected-card');
+      el.style.border = '2px solid var(--green)';
+      selectedCarrier = name;
+      selectedPrice = price;
+      const btn = document.getElementById('btn-select');
+      btn.disabled = false;
+    }
+
+    function proceedConfirm() {
+      if (!selectedCarrier) return;
+      document.getElementById('confirm-carrier').textContent = selectedCarrier;
+      document.getElementById('confirm-premium').textContent = selectedPrice;
+      document.getElementById('success-carrier').textContent = selectedCarrier;
+      goTo(5);
+    }
+
+    function resetAll() {
+      selectedCarrier = null;
+      selectedPrice = null;
+      document.querySelectorAll('.quote-card').forEach(c => {
+        c.classList.remove('selected-card');
+        if (c.id === 'qc-travelers') c.style.border = '2px solid var(--navy)';
+        else c.style.border = '1px solid var(--border)';
+      });
+      document.getElementById('btn-select').disabled = true;
+      document.querySelectorAll('.cp-dot').forEach(d => d.className = 'cp-dot');
+      goTo(1);
+    }
+  </script>
+</body>
+</html>
