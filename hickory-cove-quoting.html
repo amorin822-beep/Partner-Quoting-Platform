@@ -400,6 +400,13 @@
           <div class="secure-badge"><i class="ti ti-shield-check" style="font-size:13px;"></i> Secure EZLynx Session</div>
         </div>
 
+        <div class="proceed-bar" style="margin-bottom:18px;">
+          <p>Once you've reviewed your carrier results below, <strong>click "Request Finalization" to send your preferred quote to our team.</strong></p>
+          <button class="btn primary" onclick="goTo(3)" style="background:var(--teal); border-color:var(--teal); white-space:nowrap;">
+            <i class="ti ti-send"></i> Request Finalization
+          </button>
+        </div>
+
         <div class="iframe-wrapper">
           <iframe
             width="800"
@@ -415,15 +422,6 @@
             </a> to visit the secure live insurance quoting page.
           </iframe>
         </div>
-
-        <p class="iframe-note"><i class="ti ti-info-circle" style="font-size:14px; color:var(--teal);"></i> After reviewing your carrier results above, click the button below to submit your preferred quote to Hickory Cove for finalization.</p>
-
-        <div class="proceed-bar">
-          <p>Found a quote to move forward with? <strong>Click "Request Finalization" to send it to our team.</strong></p>
-          <button class="btn primary" onclick="goTo(3)" style="background:var(--teal); border-color:var(--teal); white-space:nowrap;">
-            <i class="ti ti-send"></i> Request Finalization
-          </button>
-        </div>
       </div>
 
       <!-- SCREEN 3: Confirm -->
@@ -437,6 +435,25 @@
           <div class="confirm-row"><span class="clabel">Selected carrier</span><span class="cval">Per quote chosen in EZLynx</span></div>
           <div class="confirm-row"><span class="clabel">Referring partner</span><span class="cval">Partner Portal — Unique Link</span></div>
           <div class="confirm-row"><span class="clabel">Submitted via</span><span class="cval">EZLynx · agentinsure.com</span></div>
+        </div>
+
+        <div style="margin-bottom:18px;">
+          <label style="display:block; font-size:12px; font-weight:700; color:var(--text3); letter-spacing:0.05em; text-transform:uppercase; margin-bottom:7px;">
+            Additional comments or instructions
+          </label>
+          <textarea
+            id="partner-comments"
+            rows="4"
+            placeholder="e.g. Client prefers a $2,500 deductible option, has a trampoline on the property, or any other notes for the agent..."
+            style="width:100%; padding:11px 13px; border:1px solid var(--border); border-radius:var(--radius); font-family:'Inter',sans-serif; font-size:13.5px; color:var(--text); background:var(--surface); resize:vertical; line-height:1.55; transition:border-color 0.15s, box-shadow 0.15s;"
+            onfocus="this.style.borderColor='var(--teal)'; this.style.boxShadow='0 0 0 3px rgba(42,157,143,0.15)';"
+            onblur="this.style.borderColor=''; this.style.boxShadow='';"
+          ></textarea>
+          <p style="font-size:12px; color:var(--text3); margin-top:7px; display:flex; align-items:center; gap:5px;">
+            <i class="ti ti-mail" style="font-size:14px; color:var(--teal);"></i>
+            You can also email additional information or questions directly to
+            <a href="mailto:Alex@hickorycoveig.com" style="color:var(--teal); font-weight:600; text-decoration:none;">Alex@hickorycoveig.com</a>
+          </p>
         </div>
 
         <div class="sla-box">
